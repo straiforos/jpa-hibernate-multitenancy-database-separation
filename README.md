@@ -20,24 +20,33 @@ This project demonstrates a Spring Boot application using JPA/Hibernate to manag
 ## Project Structure
 src/
 ├── main/
-│ ├── java/
-│ │ └── com/
-│ │ └── example/
-│ │ └── multitenant/
-│ │ ├── config/
-│ │ ├── model/
-│ │ ├── repository/
-│ │ ├── service/
-│ │ └── MultiTenantApplication.java
-│ └── resources/
-│ ├── db/
-│ │ └── migration/
-│ └── application.properties
+│   ├── java/
+│   │   └── traiforce/
+│   │       └── group/
+│   │           └── llc/
+│   │               └── jpa_hibernate_multitenancy_database_separation/
+│   │                   ├── config/
+│   │                   ├── platform/
+│   │                   │   ├── model/
+│   │                   │   ├── repository/
+│   │                   │   └── service/
+│   │                   ├── tenant/
+│   │                   │   ├── model/
+│   │                   │   ├── repository/
+│   │                   │   └── service/
+│   │                   └── JpaHibernateMultitenancyDatabaseSeparationApplication.java
+│   └── resources/
+│       ├── static/
+│       ├── templates/
+│       └── application.properties
 └── test/
-└── java/
-└── com/
-└── example/
-└── multitenant/
+    └── java/
+        └── traiforce/
+            └── group/
+                └── llc/
+                    └── jpa_hibernate_multitenancy_database_separation/
+                        ├── platform/
+                        └── tenant/
 
 ## Setup and Configuration
 
