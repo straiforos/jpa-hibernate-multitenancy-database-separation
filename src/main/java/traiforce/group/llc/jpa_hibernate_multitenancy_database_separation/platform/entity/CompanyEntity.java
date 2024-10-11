@@ -4,11 +4,12 @@ import traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.platfo
 
 
 import org.hibernate.annotations.TimeZoneColumn;
-import org.springframework.data.annotation.Id;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -21,9 +22,12 @@ public class CompanyEntity implements Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "active")
     private Boolean active;
     @TimeZoneColumn(name = "time_zone")
     private String timeZone;
+    @Column(name = "database")
     private String database;
 }
