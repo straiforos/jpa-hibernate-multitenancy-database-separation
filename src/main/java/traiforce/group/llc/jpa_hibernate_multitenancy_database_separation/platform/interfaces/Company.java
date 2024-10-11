@@ -4,6 +4,7 @@ import traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.common
 
 
 /**
+ * Our platforms tenants are companies.
  * Company interface defines our companies we support in our platform.
  */
 public interface Company extends Identifiable{
