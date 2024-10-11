@@ -20,6 +20,8 @@ public class DatabaseSeeder implements CommandLineRunner {
         seedCompanies();
     }
 
+    // TODO make it dynamic and detect missing companies
+    // TODO make it configurable
     private void seedCompanies() {
         if (companyRepository.count() == 0) {
             List<CompanyEntity> companies = Arrays.asList(
