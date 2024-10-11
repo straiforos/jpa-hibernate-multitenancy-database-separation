@@ -1,5 +1,6 @@
 package traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -9,6 +10,7 @@ import traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.platfo
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @Component
 public class DatabaseSeeder implements CommandLineRunner {
 
@@ -22,8 +24,12 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     // TODO make it dynamic and detect missing companies
     // TODO make it configurable
+    /**
+     * Seed companies into the platform database
+     */
     private void seedCompanies() {
         if (companyRepository.count() == 0) {
+            log.info("Seeding companies into the platform database");
             List<CompanyEntity> companies = Arrays.asList(
                 new CompanyEntity("Company A", true, "America/New_York", "company_a_db"),
                 new CompanyEntity("Company B", true, "America/Chicago", "company_b_db"),
@@ -31,9 +37,9 @@ public class DatabaseSeeder implements CommandLineRunner {
             );
 
             companyRepository.saveAll(companies);
-            System.out.println("Companies seeded successfully.");
+            log.info("Seeded {} companies into the platform database", companies.size());
         } else {
-            System.out.println("Companies already exist, skipping seeding.");
+            log.info("Companies already exist in the platform database, skipping seeding");
         }
     }
 }
