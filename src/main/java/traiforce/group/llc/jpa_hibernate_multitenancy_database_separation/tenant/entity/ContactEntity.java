@@ -1,7 +1,7 @@
 package traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.tenant.entity;
 
-import traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.tenant.interfaces.Contact;
 import lombok.Data;
+import traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.tenant.interfaces.model.Contact;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

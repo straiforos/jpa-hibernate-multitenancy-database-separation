@@ -8,5 +8,11 @@ public class CompanyImpl implements Company {
     private Long id;
     private String name;
     private Boolean active;
-    private String timeZone;    
+    private String timeZone;
+    private String database;
+
+    @Override
+    public String toString(){
+        return database;
+    }
 }

@@ -1,6 +1,6 @@
 package traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.platform.interfaces;
 
-import traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.common.interfaces.Identifiable;
+import traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.common.interfaces.model.Identifiable;
 
 
 /**
@@ -23,4 +23,10 @@ public interface Company extends Identifiable{
      * @return the time zone of the company
      */
     String getTimeZone();
+
+    /**
+     * Get the database of the company
+     * @return the database of the company
+     */
+    String getDatabase();
 }

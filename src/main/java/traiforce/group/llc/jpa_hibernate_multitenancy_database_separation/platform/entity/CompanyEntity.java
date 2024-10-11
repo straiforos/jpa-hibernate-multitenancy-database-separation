@@ -25,4 +25,5 @@ public class CompanyEntity implements Company {
     private Boolean active;
     @TimeZoneColumn(name = "time_zone")
     private String timeZone;
+    private String database;
 }
