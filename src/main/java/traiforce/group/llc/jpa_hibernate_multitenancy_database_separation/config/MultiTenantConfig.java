@@ -3,6 +3,7 @@ package traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.confi
 import org.hibernate.cfg.Environment;
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -26,6 +27,9 @@ import java.util.Map;
     transactionManagerRef = "tenantTransactionManager"
 )
 public class MultiTenantConfig {
+
+    @Autowired
+    private TenantIdentifierResolver tenantIdentifierResolver;
 
     @Value("${spring.datasource.url}")
     private String url;
@@ -54,7 +58,7 @@ public class MultiTenantConfig {
     @Bean(name = "tenantDataSource")
     public DataSource tenantDataSource() {
         return DataSourceBuilder.create()
-            .url(url)
+            .url(tenantIdentifierResolver.resolveTenantUrl())
             .username(username)
             .password(password)
             .driverClassName(driverClassName)
@@ -80,20 +84,11 @@ public class MultiTenantConfig {
         return new JpaTransactionManager(tenantEntityManager.getObject());
     }
 
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
+    @Bean(name = "tenantEntityManagerFactory")
+    public LocalContainerEntityManagerFactoryBean tenantEntityManagerFactory(
             @Qualifier("tenantDataSource") DataSource dataSource,
             MultiTenantConnectionProvider<Company> multiTenantConnectionProvider,
-            CurrentTenantIdentifierResolver<Company> currentTenantIdentifierResolver
-    ) {
-        Map<String, Object> properties = new HashMap<>();
-        properties.put(Environment.MULTI_TENANT_CONNECTION_PROVIDER, multiTenantConnectionProvider);
-        properties.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, currentTenantIdentifierResolver);
-        properties.put(Environment.DIALECT, dialect);
-        properties.put(Environment.SHOW_SQL, showSql);
-        properties.put(Environment.FORMAT_SQL, formatSql);
-        properties.put(Environment.HBM2DDL_AUTO, ddlAuto);
-
+            CurrentTenantIdentifierResolver<Company> currentTenantIdentifierResolver) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
         em.setPackagesToScan("traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.tenant.entity");
@@ -101,8 +96,16 @@ public class MultiTenantConfig {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
 
-        em.setJpaPropertyMap(properties);
+        Map<String, Object> properties = new HashMap<>();
+        properties.put(Environment.MULTI_TENANT_CONNECTION_PROVIDER, multiTenantConnectionProvider);
+        properties.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, currentTenantIdentifierResolver);
+        properties.put(Environment.DIALECT, dialect);
+        properties.put(Environment.SHOW_SQL, showSql);
+        properties.put(Environment.FORMAT_SQL, formatSql);
+        properties.put(Environment.HBM2DDL_AUTO, ddlAuto);
+        
 
+        em.setJpaPropertyMap(properties);
         return em;
     }
 }
