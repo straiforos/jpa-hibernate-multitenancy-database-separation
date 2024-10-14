@@ -30,13 +30,13 @@ class JpaHibernateMultitenancyDatabaseSeparationApplicationTests {
     @Test
     void testDatabaseSchemas() throws SQLException {
         // Test platform database
-        assertTrue(tableExistsInDatabase("companies", "platform_db"));
-        assertFalse(tableExistsInDatabase("contacts", "platform_db"));
+        assertTrue(tableExistsInDatabase("companies", "platform_db"), "companies table should exist in platform_db");
+        assertFalse(tableExistsInDatabase("contacts", "platform_db"), "contacts table should not exist in platform_db");
 
         // Test tenant database
         String tenantDb = tenantIdentifierResolver.resolveCurrentTenantIdentifier();
-        assertFalse(tableExistsInDatabase("companies", tenantDb));
-        assertTrue(tableExistsInDatabase("contacts", tenantDb));
+        assertFalse(tableExistsInDatabase("companies", tenantDb), "companies table should not exist in " + tenantDb);
+        assertTrue(tableExistsInDatabase("contacts", tenantDb), "contacts table should exist in " + tenantDb);
     }
 
     private boolean tableExistsInDatabase(String tableName, String dbName) throws SQLException {
