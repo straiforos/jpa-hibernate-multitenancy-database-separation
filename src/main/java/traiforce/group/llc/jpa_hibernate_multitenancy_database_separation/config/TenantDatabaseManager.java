@@ -8,6 +8,10 @@ import traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.platfo
 
 import javax.sql.DataSource;
 
+/**
+ * Hueristic to create tenant databases if they don't exist. 
+ * TODO Hibernate ORM should automatically do this, but it doesn't.
+ */
 @Slf4j
 @Component
 public class TenantDatabaseManager {
