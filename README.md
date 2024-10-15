@@ -18,6 +18,7 @@ This project demonstrates a Spring Boot application using JPA/Hibernate to manag
 - PostgreSQL
 
 ## Project Structure
+```
 src/
 ├── main/
 │   ├── java/
@@ -47,6 +48,7 @@ src/
                     └── jpa_hibernate_multitenancy_database_separation/
                         ├── platform/
                         └── tenant/
+```
 
 ## Setup and Configuration
 
