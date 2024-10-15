@@ -56,10 +56,21 @@ src/
 
 ## Usage
 
-Explain how to use the application, including:
-- How to add a new tenant
-- How to perform operations on tenant-specific data
-- How to manage shared platform data
+### Prerequisites
+- Docker and Docker Compose
+- JDK 11+
+- Maven
+
+### Quick Start
+1. Start PostgreSQL:
+   ```bash
+   docker-compose up -d
+   ```
+
+2. Run the application:
+   ```bash
+   mvn spring-boot:run
+   ```
 
 ## Adding Tenants
 
