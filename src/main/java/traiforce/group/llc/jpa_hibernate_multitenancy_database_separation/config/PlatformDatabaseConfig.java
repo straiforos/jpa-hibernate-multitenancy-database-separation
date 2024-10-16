@@ -38,9 +38,9 @@ public class PlatformDatabaseConfig {
     public DataSource platformDataSource() {
         return DataSourceBuilder.create()
             .url(hibernateProperties.getPlatformUrl())
-            .username(hibernateProperties.getPlatformUsername())
-            .password(hibernateProperties.getPlatformPassword())
-            .driverClassName(hibernateProperties.getPlatformDriverClass())
+            .username(hibernateProperties.getUsername())
+            .password(hibernateProperties.getPassword())
+            .driverClassName(hibernateProperties.getDriverClass())
             .build();
     }
 

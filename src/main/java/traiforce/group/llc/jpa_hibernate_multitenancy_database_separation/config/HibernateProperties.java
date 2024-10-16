@@ -51,9 +51,17 @@ public class HibernateProperties {
     @Value("${hibernate.format_sql}")
     private String formatSql;
 
+    public String getPlatformUrl() {
+        return getBaseUrl() + "/" + getPlatformDatabase();
+    }
+
+    public String getTenantUrl() {
+        return getBaseUrl() + "/" + getTenantDatabase();
+    }
+
     public Properties getPlatformProperties() {
         Properties props = new Properties();
-        props.setProperty(AvailableSettings.JAKARTA_JDBC_URL, getBaseUrl() + "/" + getPlatformDatabase());
+        props.setProperty(AvailableSettings.JAKARTA_JDBC_URL, getPlatformUrl());
         props.setProperty(AvailableSettings.JAKARTA_JDBC_USER, getUsername());
         props.setProperty(AvailableSettings.JAKARTA_JDBC_PASSWORD, getPassword());
         props.setProperty(AvailableSettings.JAKARTA_JDBC_DRIVER, getDriverClass());
@@ -66,7 +74,7 @@ public class HibernateProperties {
 
     public Properties getTenantProperties() {
         Properties props = new Properties();
-        props.setProperty(AvailableSettings.JAKARTA_JDBC_URL, getBaseUrl() + "/" + getTenantDatabase());
+        props.setProperty(AvailableSettings.JAKARTA_JDBC_URL, getTenantUrl());
         props.setProperty(AvailableSettings.JAKARTA_JDBC_USER, getUsername());
         props.setProperty(AvailableSettings.JAKARTA_JDBC_PASSWORD, getPassword());
         props.setProperty(AvailableSettings.JAKARTA_JDBC_DRIVER, getDriverClass());
