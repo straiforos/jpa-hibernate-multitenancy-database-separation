@@ -11,14 +11,15 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.orm.jpa.JpaTransactionManager;
 
-
 import javax.sql.DataSource;
 import java.util.Properties;
 
 /**
  * MultiTenantConfig
  * 
- * This class is used to configure the multi-tenant data source, entity manager, and transaction manager.
+ * This class is used to configure the multi-tenant data source, entity manager,
+ * and transaction manager.
+ * 
  * @author traiforce.group.llc
  * @version 1.0
  * @since 2024-10-01
@@ -26,9 +27,6 @@ import java.util.Properties;
 @Configuration
 @EnableJpaRepositories(basePackages = "traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.tenant.repository", entityManagerFactoryRef = "tenantEntityManager", transactionManagerRef = "tenantTransactionManager")
 public class MultiTenantConfig {
-
-    @Autowired
-    private TenantIdentifierResolver tenantIdentifierResolver;
 
     @Autowired
     private HibernateProperties hibernateProperties;
