@@ -9,6 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+
+import traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.tenant.repository.ContactRepository;
+
 import org.springframework.orm.jpa.JpaTransactionManager;
 
 import javax.sql.DataSource;
@@ -25,7 +28,11 @@ import java.util.Properties;
  * @since 2024-10-01
  */
 @Configuration
-@EnableJpaRepositories(basePackages = "traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.tenant.repository", entityManagerFactoryRef = "tenantEntityManager", transactionManagerRef = "tenantTransactionManager")
+@EnableJpaRepositories(
+    basePackageClasses = ContactRepository.class,
+    entityManagerFactoryRef = "tenantEntityManager",
+    transactionManagerRef = "tenantTransactionManager"
+)
 public class MultiTenantConfig {
 
     @Autowired

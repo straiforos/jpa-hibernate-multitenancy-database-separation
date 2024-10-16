@@ -12,6 +12,8 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.platform.repository.CompanyRepository;
+
 import javax.sql.DataSource;
 
 /**
@@ -24,8 +26,8 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableJpaRepositories(
-    basePackages = "traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.platform.repository",
-    entityManagerFactoryRef = "platformEntityManager",
+    basePackageClasses = CompanyRepository.class,
+entityManagerFactoryRef = "platformEntityManager",
     transactionManagerRef = "platformTransactionManager"
 )
 public class PlatformDatabaseConfig {
