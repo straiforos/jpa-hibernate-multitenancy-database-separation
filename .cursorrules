@@ -1,0 +1,152 @@
+The application is using Hibernate 6.6.4 and attempts to demo the separate data source multitenancy approach. Do not use schema or column tenant discriminator.
+
+This is my existing directory structure, do not deviate from it.
+.
+├── HELP.md
+├── README.md
+├── application.log
+├── application.log.2024-10-10.0.gz
+├── application.log.2024-10-11.0.gz
+├── application.log.2024-10-14.0.gz
+├── docker-compose.yml
+├── pom.xml
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── traiforce
+│   │   │       └── group
+│   │   │           └── llc
+│   │   │               └── jpa_hibernate_multitenancy_database_separation
+│   │   │                   ├── JpaHibernateMultitenancyDatabaseSeparationApplication.java
+│   │   │                   ├── common
+│   │   │                   │   └── interfaces
+│   │   │                   │       ├── controller
+│   │   │                   │       │   └── RESTAPI.java
+│   │   │                   │       ├── model
+│   │   │                   │       │   └── Identifiable.java
+│   │   │                   │       └── service
+│   │   │                   │           └── Service.java
+│   │   │                   ├── config
+│   │   │                   │   ├── DatabaseSeeder.java
+│   │   │                   │   ├── MultiTenantConfig.java
+│   │   │                   │   ├── MultiTenantConnectionProviderImpl.java
+│   │   │                   │   ├── PlatformDatabaseConfig.java
+│   │   │                   │   ├── TenantDatabaseManager.java
+│   │   │                   │   └── TenantIdentifierResolver.java
+│   │   │                   ├── platform
+│   │   │                   │   ├── entity
+│   │   │                   │   │   └── CompanyEntity.java
+│   │   │                   │   ├── interfaces
+│   │   │                   │   │   └── Company.java
+│   │   │                   │   ├── model
+│   │   │                   │   │   └── CompanyImpl.java
+│   │   │                   │   ├── repository
+│   │   │                   │   │   └── CompanyRepository.java
+│   │   │                   │   └── service
+│   │   │                   │       └── CompanyService.java
+│   │   │                   └── tenant
+│   │   │                       ├── controller
+│   │   │                       │   └── ContactAPIImpl.java
+│   │   │                       ├── entity
+│   │   │                       │   └── ContactEntity.java
+│   │   │                       ├── interfaces
+│   │   │                       │   ├── controller
+│   │   │                       │   │   └── ContactAPI.java
+│   │   │                       │   ├── model
+│   │   │                       │   │   └── Contact.java
+│   │   │                       │   └── service
+│   │   │                       │       ├── ContactService.java
+│   │   │                       │       └── ContactServiceImpl.java
+│   │   │                       ├── model
+│   │   │                       │   └── ContactImpl.java
+│   │   │                       └── repository
+│   │   │                           └── ContactRepository.java
+│   │   └── resources
+│   │       └── application.properties
+│   └── test
+│       └── java
+│           └── traiforce
+│               └── group
+│                   └── llc
+│                       └── jpa_hibernate_multitenancy_database_separation
+│                           └── JpaHibernateMultitenancyDatabaseSeparationApplicationTests.java
+└── target
+    ├── classes
+    │   ├── META-INF
+    │   │   └── spring-configuration-metadata.json
+    │   ├── application.properties
+    │   └── traiforce
+    │       └── group
+    │           └── llc
+    │               └── jpa_hibernate_multitenancy_database_separation
+    │                   ├── JpaHibernateMultitenancyDatabaseSeparationApplication.class
+    │                   ├── common
+    │                   │   └── interfaces
+    │                   │       ├── controller
+    │                   │       │   └── RESTAPI.class
+    │                   │       ├── model
+    │                   │       │   └── Identifiable.class
+    │                   │       └── service
+    │                   │           └── Service.class
+    │                   ├── config
+    │                   │   ├── DatabaseSeeder.class
+    │                   │   ├── MultiTenantConfig.class
+    │                   │   ├── MultiTenantConnectionProviderImpl.class
+    │                   │   ├── PlatformDatabaseConfig.class
+    │                   │   ├── TenantDatabaseManager.class
+    │                   │   └── TenantIdentifierResolver.class
+    │                   ├── platform
+    │                   │   ├── entity
+    │                   │   │   └── CompanyEntity.class
+    │                   │   ├── interfaces
+    │                   │   │   └── Company.class
+    │                   │   ├── model
+    │                   │   │   └── CompanyImpl.class
+    │                   │   ├── repository
+    │                   │   │   └── CompanyRepository.class
+    │                   │   └── service
+    │                   │       └── CompanyService.class
+    │                   └── tenant
+    │                       ├── controller
+    │                       │   └── ContactAPIImpl.class
+    │                       ├── entity
+    │                       │   └── ContactEntity.class
+    │                       ├── interfaces
+    │                       │   ├── controller
+    │                       │   │   └── ContactAPI.class
+    │                       │   ├── model
+    │                       │   │   └── Contact.class
+    │                       │   └── service
+    │                       │       ├── ContactService.class
+    │                       │       └── ContactServiceImpl.class
+    │                       ├── model
+    │                       │   └── ContactImpl.class
+    │                       └── repository
+    │                           └── ContactRepository.class
+    ├── generated-sources
+    │   └── annotations
+    ├── generated-test-sources
+    │   └── test-annotations
+    ├── jpa-hibernate-multitenancy-database-separation-0.0.1-SNAPSHOT.jar
+    ├── jpa-hibernate-multitenancy-database-separation-0.0.1-SNAPSHOT.jar.original
+    ├── maven-archiver
+    │   └── pom.properties
+    ├── maven-status
+    │   └── maven-compiler-plugin
+    │       ├── compile
+    │       │   └── default-compile
+    │       │       ├── createdFiles.lst
+    │       │       └── inputFiles.lst
+    │       └── testCompile
+    │           └── default-testCompile
+    │               ├── createdFiles.lst
+    │               └── inputFiles.lst
+    ├── surefire-reports
+    │   ├── TEST-traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.JpaHibernateMultitenancyDatabaseSeparationApplicationTests.xml
+    │   └── traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.JpaHibernateMultitenancyDatabaseSeparationApplicationTests.txt
+    └── test-classes
+        └── traiforce
+            └── group
+                └── llc
+                    └── jpa_hibernate_multitenancy_database_separation
+                        └── JpaHibernateMultitenancyDatabaseSeparationApplicationTests.class
