@@ -22,7 +22,7 @@ public class TenantIdentifierResolver implements CurrentTenantIdentifierResolver
     public String resolveCurrentTenantIdentifier() {
         // For simplicity, we're returning a default tenant.
         // In a real application, you'd determine the current tenant based on the request or user context.
-        return "default";
+        return hibernateProperties.getTenantUrl();
     }
 
     @Override
