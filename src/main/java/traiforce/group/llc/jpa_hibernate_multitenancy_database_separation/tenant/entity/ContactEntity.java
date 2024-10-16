@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 
 // TODO make for tenant database
 @Data
-@Entity
+@Entity(name = "Contact")
 @Table(name = "contacts")
 public class ContactEntity implements Contact {
     @Id

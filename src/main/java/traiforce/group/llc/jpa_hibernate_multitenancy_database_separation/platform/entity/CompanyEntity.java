@@ -16,7 +16,7 @@ import lombok.AllArgsConstructor;
 
 // TODO make this a platform entity
 // TODO make entity interface to contain annotations keeping our classes clean
-@Entity
+@Entity(name = "Company")
 @Table(name = "companies")
 @Data
 @NoArgsConstructor
