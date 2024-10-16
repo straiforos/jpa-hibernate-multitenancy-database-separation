@@ -1,11 +1,8 @@
 package traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.config;
 
 import org.hibernate.cfg.Environment;
-import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
-import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,55 +11,36 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.orm.jpa.JpaTransactionManager;
 
-import traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.platform.interfaces.Company;
 
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Properties;
 
+/**
+ * MultiTenantConfig
+ * 
+ * This class is used to configure the multi-tenant data source, entity manager, and transaction manager.
+ * @author traiforce.group.llc
+ * @version 1.0
+ * @since 2024-10-01
+ */
 @Configuration
-@EnableJpaRepositories(
-    basePackages = "traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.tenant.repository",
-    entityManagerFactoryRef = "tenantEntityManager",
-    transactionManagerRef = "tenantTransactionManager"
-)
+@EnableJpaRepositories(basePackages = "traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.tenant.repository", entityManagerFactoryRef = "tenantEntityManager", transactionManagerRef = "tenantTransactionManager")
 public class MultiTenantConfig {
 
     @Autowired
     private TenantIdentifierResolver tenantIdentifierResolver;
 
-    @Value("${spring.datasource.url}")
-    private String url;
-
-    @Value("${spring.datasource.username}")
-    private String username;
-
-    @Value("${spring.datasource.password}")
-    private String password;
-
-    @Value("${spring.datasource.driver-class-name}")
-    private String driverClassName;
-
-    @Value("${spring.jpa.hibernate.ddl-auto}")
-    private String ddlAuto;
-
-    @Value("${spring.jpa.properties.hibernate.dialect}")
-    private String dialect;
-
-    @Value("${spring.jpa.show-sql}")
-    private boolean showSql;
-
-    @Value("${spring.jpa.properties.hibernate.format_sql}")
-    private boolean formatSql;
+    @Autowired
+    private HibernateProperties hibernateProperties;
 
     @Bean(name = "tenantDataSource")
     public DataSource tenantDataSource() {
         return DataSourceBuilder.create()
-            .url(tenantIdentifierResolver.resolveTenantUrl())
-            .username(username)
-            .password(password)
-            .driverClassName(driverClassName)
-            .build();
+                .url(tenantIdentifierResolver.resolveTenantUrl())
+                .username(hibernateProperties.getTenantUsername())
+                .password(hibernateProperties.getTenantPassword())
+                .driverClassName(hibernateProperties.getTenantDriverClass())
+                .build();
     }
 
     @Bean(name = "tenantEntityManager")
@@ -74,6 +52,7 @@ public class MultiTenantConfig {
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
+        em.setJpaProperties(hibernateProperties.getTenantProperties());
 
         return em;
     }
@@ -87,8 +66,8 @@ public class MultiTenantConfig {
     @Bean(name = "tenantEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean tenantEntityManagerFactory(
             @Qualifier("tenantDataSource") DataSource dataSource,
-            MultiTenantConnectionProvider<Company> multiTenantConnectionProvider,
-            CurrentTenantIdentifierResolver<Company> currentTenantIdentifierResolver) {
+            MultiTenantConnectionProviderImpl multiTenantConnectionProvider,
+            TenantIdentifierResolver currentTenantIdentifierResolver) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
         em.setPackagesToScan("traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.tenant.entity");
@@ -96,16 +75,12 @@ public class MultiTenantConfig {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
 
-        Map<String, Object> properties = new HashMap<>();
+        Properties properties = new Properties();
         properties.put(Environment.MULTI_TENANT_CONNECTION_PROVIDER, multiTenantConnectionProvider);
         properties.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, currentTenantIdentifierResolver);
-        properties.put(Environment.DIALECT, dialect);
-        properties.put(Environment.SHOW_SQL, showSql);
-        properties.put(Environment.FORMAT_SQL, formatSql);
-        properties.put(Environment.HBM2DDL_AUTO, ddlAuto);
-        
+        properties.putAll(hibernateProperties.getTenantProperties());
 
-        em.setJpaPropertyMap(properties);
+        em.setJpaProperties(properties);
         return em;
     }
 }

@@ -1,25 +1,28 @@
 package traiforce.group.llc.jpa_hibernate_multitenancy_database_separation.config;
 
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
+/**
+ * TenantIdentifierResolver
+ * 
+ * This class is used to resolve the current tenant identifier.
+ * @author traiforce.group.llc
+ * @version 1.0
+ * @since 2024-10-01
+ */
 @Component
-public class TenantIdentifierResolver implements CurrentTenantIdentifierResolver {
+public class TenantIdentifierResolver implements CurrentTenantIdentifierResolver<String> {
 
-    private static final String DEFAULT_TENANT = "company_a_db";
-
-    @Value("${spring.datasource.url}")
-    private String baseUrl;
+    @Autowired
+    private HibernateProperties hibernateProperties;
 
     @Override
     public String resolveCurrentTenantIdentifier() {
-        // TODO: Implement logic to determine the current tenant
-        // This could be based on a ThreadLocal, request parameter, or other mechanism
-        return DEFAULT_TENANT;
+        // For simplicity, we're returning a default tenant.
+        // In a real application, you'd determine the current tenant based on the request or user context.
+        return "default";
     }
 
     @Override
@@ -28,8 +31,7 @@ public class TenantIdentifierResolver implements CurrentTenantIdentifierResolver
     }
 
     public String resolveTenantUrl() {
-        String tenant = resolveCurrentTenantIdentifier();
-        log.info("Resolved tenant URL: {}", baseUrl.replace("platform_db", tenant));
-        return baseUrl.replace("platform_db", tenant);
+        // Use the tenant URL from HibernateProperties
+        return hibernateProperties.getTenantUrl();
     }
 }
