@@ -1,6 +1,6 @@
 # Multi-Tenant Database Management with Spring Boot
 
-This project demonstrates a Spring Boot application using JPA/Hibernate to manage multiple tenant databases and a platform database. It showcases database creation, seeding, and updating for both tenant-specific and shared platform data.
+This project is a proof of concept exploration using a Spring Boot application with JPA/Hibernate to manage multiple tenant databases and a platform database. It showcases database creation, seeding, and updating for both tenant-specific and shared platform data.
 
 ## Disclaimer
 
