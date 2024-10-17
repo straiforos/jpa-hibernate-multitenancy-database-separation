@@ -2,6 +2,14 @@
 
 This project demonstrates a Spring Boot application using JPA/Hibernate to manage multiple tenant databases and a platform database. It showcases database creation, seeding, and updating for both tenant-specific and shared platform data.
 
+## Disclaimer
+
+**Important:** During the development of this project, it was discovered that Hibernate does not natively support schema export for multitenancy when using the separate database approach. This limitation makes Hibernate less suitable for this specific use case.
+
+As a result, we are planning to explore Flyway as an alternative solution for managing database schemas in a multi-tenant environment. Flyway provides more robust support for database migrations and schema management across multiple databases.
+
+Future updates to this project will likely involve integrating Flyway for improved multi-tenant database management.
+
 ## Features
 
 - Multi-tenant database support
@@ -14,7 +22,8 @@ This project demonstrates a Spring Boot application using JPA/Hibernate to manag
 
 - Spring Boot
 - Spring Data JPA
-- Hibernate
+- Hibernate 
+- Flyway
 - PostgreSQL
 
 ## Project Structure
@@ -48,7 +57,6 @@ src/
                     └── jpa_hibernate_multitenancy_database_separation/
                         ├── platform/
                         └── tenant/
-```
 
 ## Setup and Configuration
 
